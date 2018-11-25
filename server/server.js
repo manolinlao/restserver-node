@@ -1,4 +1,6 @@
-require('../config/config');
+require('./config/config');
+
+const mongoose = require('mongoose');
 
 const express = require('express');
 const app = express();
@@ -11,42 +13,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 // parse application/json
 app.use(bodyParser.json());
 
-//Rutas
-app.get('/', (req,res)=>{
-  res.json('Hello world');
-});
+//Cargo fichero de rutas
+app.use(require('./rutas/usuario'));
 
-app.get('/usuario', (req,res)=>{
-  res.json('get Usuario');
-});
 
-app.post('/usuario', (req,res)=>{
-  let body = req.body;
 
-  if(body.nombre==undefined){
-    //en vez de mandar un json envío un status, para enviar un código de respuesta
-    res.status(400).json({
-      ok: false,
-      mensaje: "El nombre es necesario"
-    });
-  }else{
-    res.json({
-      persona: body
-    });
+//mongoose.connect('mongodb:localhost:27017/cafe',(error,respuesta)=>{
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true },(error,respuesta)=>{
+  if(error){
+    throw error;
   }
-});
-
-app.put('/usuario/:id', (req,res)=>{
-  let param_id = req.params.id;
-
-  res.json({
-    param_id
-  });
-
-});
-
-app.delete('/usuario', (req,res)=>{
-  res.json('delete Usuario');
+  console.log('Base de datos ONLINE');
 });
 
 app.listen(process.env.PORT, ()=>{

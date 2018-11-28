@@ -13,9 +13,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 // parse application/json
 app.use(bodyParser.json());
 
-//Cargo fichero de rutas
-app.use(require('./rutas/usuario'));
-
+//Cargo fichero de rutas global
+app.use(require('./rutas/rutas'));
 
 
 //mongoose.connect('mongodb:localhost:27017/cafe',(error,respuesta)=>{

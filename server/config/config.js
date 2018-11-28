@@ -22,3 +22,15 @@ if(process.env.NODE_ENV==="dev"){
 }
 //nos inventamos el environment URLDB que usaremos en server.js
 process.env.URLDB = urlDB;
+
+//==========================
+//  Vencimiento del token
+//==========================
+//60 segundos  60 minutos 24 horas 30 días
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+
+//==========================
+//  SEED
+//==========================
+process.env.SEED = process.env.SEED || 'este-es-el-seed-desarrollo';

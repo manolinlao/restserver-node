@@ -8,8 +8,11 @@ const bcrypt = require('bcrypt');
 //Librería underscore
 const _ = require('underscore');
 
+//Para el middleware del token
+const { verificaToken, verificaSuper_Role } = require('../middlewares/autenticacion');
 
-app.get('/usuario', (req,res)=>{
+
+app.get('/usuario', verificaToken, (req,res)=>{
 
   //si no viene el parámetro "desde" consideramos que será el "0"
   let desde = req.query.desde || 0;
@@ -38,7 +41,7 @@ app.get('/usuario', (req,res)=>{
     })
 });
 
-app.post('/usuario', (req,res)=>{
+app.post('/usuario',[verificaToken,verificaSuper_Role], (req,res)=>{
   let body = req.body;
 
   let usuario = new Usuario({
@@ -69,7 +72,7 @@ app.post('/usuario', (req,res)=>{
 
 });
 
-app.put('/usuario/:id', (req,res)=>{
+app.put('/usuario/:id',[verificaToken,verificaSuper_Role], (req,res)=>{
   let id = req.params.id;
   //utilizo la función pick del underscore porque sólo quiero actualizar esos campos
   let body = _.pick(req.body, ['nombre','email','img','role','estado']);
@@ -92,7 +95,7 @@ app.put('/usuario/:id', (req,res)=>{
 
 });
 
-app.delete('/usuario/:id', (req,res)=>{
+app.delete('/usuario/:id', [verificaToken,verificaSuper_Role],(req,res)=>{
 
   let id = req.params.id;
 

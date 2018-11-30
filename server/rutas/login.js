@@ -5,6 +5,9 @@ const Usuario = require('../modelos/usuario');
 
 const jwt = require('jsonwebtoken');
 
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
+
 app.post('/login',(req,res)=>{
 
   //En el body viajarán el email-password
@@ -55,6 +58,34 @@ app.post('/login',(req,res)=>{
     });
 
   });
+});
+
+
+//Configuraciones de google
+async function verify( token ) {
+  const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+  });
+  const payload = ticket.getPayload();  //con este payload ya tenemos el usuario
+  console.log(payload.name);
+  console.log(payload.email);
+  console.log(payload.picture);
+}
+
+
+app.post('/google', (req,res)=>{
+
+  let token = req.body.idtoken; //habíamos hecho     xhr.send('idtoken=' + id_token);
+
+  verify(token);
+
+  res.json({
+    token: token
+  });
+
 });
 
 

@@ -16,6 +16,12 @@ app.use(bodyParser.json());
 //Cargo fichero de rutas global
 app.use(require('./rutas/rutas'));
 
+// habilitar la carpeta public
+//app.use(express.static(__dirname +'../public'));
+const path = require('path');
+app.use( express.static( path.resolve(__dirname ,'../public') ) );
+
+
 
 //mongoose.connect('mongodb:localhost:27017/cafe',(error,respuesta)=>{
 mongoose.connect(process.env.URLDB, { useNewUrlParser: true },(error,respuesta)=>{

@@ -52,7 +52,33 @@ let verificaSuper_Role = (req, res, next ) => {
   }
 }
 
+// =============================
+// Verificar token para imagen (por URL)
+// =============================
+let verificaTokenImg = (req, res, next) => {
+  //obtenemos el token por url
+  let token = req.query.token;  //enviare ....?token=...
+
+
+  jwt.verify(token, process.env.SEED, (err,decoded)=>{
+    if(err){
+      return res.status(401).json({
+        ok: false,
+        err:{
+          message: 'token no valido'
+        }
+      });
+    }
+    
+    req.usuario = decoded.usuario;
+
+    next();
+
+  });
+}
+
 module.exports = {
   verificaToken,
-  verificaSuper_Role
+  verificaSuper_Role,
+  verificaTokenImg
 }

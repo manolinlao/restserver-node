@@ -31,6 +31,7 @@ app.get('/categoria', verificaToken, (req,res)=>{
       });
     })
 });
+
 //===============================
 // Obtiene una categoría por ID
 //===============================
